@@ -1,3 +1,5 @@
+package nodes;
+
 /*
  * To start i'll implement "on-grid" bounce back. The difference between the BBNode and the LatticeNode is 
  * the way fStar values are collected. Otherwise everything else seems the same. 

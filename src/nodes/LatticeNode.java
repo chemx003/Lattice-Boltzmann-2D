@@ -1,3 +1,4 @@
+package nodes;
 /*
  * The theory of the LatticeNode class is mostly derived from Yuanxun Bill Bao's 
  * Lattice Boltzmann Method for Fluid Simulations
@@ -143,13 +144,27 @@ public class LatticeNode {
 	}
 
 	/*
-	 * @return				velocity vector at the node as an array
+	 * @return	u			velocity vector at the node as an array
 	 */
 	public double[] getU(){
 		if(u!=null)
 			return u;
 		else
 			return null;
+	}
+	
+	/*
+	 * @return	vMag		velocity magnitude at the node
+	 */
+	public double getVMag(){
+		double vMag=0.0;
+		if(u!=null){
+			vMag=Math.sqrt(u[0]*u[0]+u[1]*u[1]);
+			return vMag;
+		}
+		else{
+			return vMag;
+		}
 	}
 	
 	/*

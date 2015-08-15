@@ -1,8 +1,12 @@
+package simulations;
 /*
- * It seems as if the nodes are not interacting with each other
+ * This is a simple simulation that places LatticeNodes in a square grid and BBNodes at the boundaries
  */
 
 import java.io.IOException;
+import lattices.Lattice;
+import nodes.BBNode;
+import nodes.LatticeNode;
 
 public class Test {
 	
@@ -17,15 +21,17 @@ public class Test {
 		for(int i=0;i<49;i++){
 			BBNode testBC=new BBNode(testU, testP);
 			testLattice.set(i, 0, testBC);
+			testBC=new BBNode(testU, testP);
 			testLattice.set(i, 48, testBC);
 		}
 		for(int j=0;j<49;j++){
 			BBNode testBC=new BBNode(testU, testP);
 			testLattice.set(0, j, testBC);
+			testBC=new BBNode(testU, testP);
 			testLattice.set(48, j, testBC);
 		}
 		
-		testLattice.set(22,22,hpNode);
+		testLattice.set(25,25,hpNode);
 		
 		testLattice.linkNodes();
 		

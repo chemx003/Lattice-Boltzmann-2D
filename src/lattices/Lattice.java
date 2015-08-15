@@ -1,3 +1,4 @@
+package lattices;
 /*
  * The Lattice object will hold LattceNode and BBNode objects. It will have methods to initialize the LatticeNodes at 
  * locations with a global velocity and density. Will also need methods to change the properties of nodes in a specific area.
@@ -7,6 +8,7 @@
  */
 
 import java.io.*;
+import nodes.LatticeNode;
 
 public class Lattice {
 	
@@ -43,7 +45,7 @@ public class Lattice {
 	/*
 	 * Links the nodes together. DO NOT CALL UNTIL BOUNDARIES SET.
 	 * 
-	 * ALSO: recall that nodes[][] does not include to 0 basis need to shift things over
+	 * ALSO: recall that nodes does not include to 0 basis need to shift things over
 	 */
 	public void linkNodes(){
 		
@@ -74,6 +76,22 @@ public class Lattice {
 				lattice[i+1][j-1].setNode(5, lattice[i][j]);
 			}
 		}//diag down
+	}
+	
+	/*
+	 * This will create a vertical (left and right) periodic boundaries by linking the nodes on 
+	 * both sides together
+	 */
+	public void verticalPBounds(){
+		//left side
+		for(int j=1; j<lenY-1;j++){
+			lattice[0][j].setNode(6, lattice[lenX-1][j-1]);
+			lattice[0][j].setNode(2, lattice[lenX-1][j]);
+			lattice[0][j].setNode(5, lattice[lenX-1][j+1]);
+			lattice[lenX-1][j].setNode(7, lattice[0][j-1]);
+			lattice[lenX-1][j].setNode(0, lattice[0][j]);
+			lattice[lenX-1][j].setNode(4, lattice[0][j+1]);
+		}
 	}
 	
 	/*
@@ -144,6 +162,26 @@ public class Lattice {
 				out.close();
 			}
 		}
+	}
+	
+	public void writeVMag(String filename) throws IOException{
+		PrintWriter out=null;
+		
+		try{
+			out=new PrintWriter(new FileWriter(filename));
+			out.println("#"+"\t" + "x" + "\t" +"y"+"\t"+"velocity");
+			for(int i=0;i<lenX;i++){
+				for(int j=0;j<lenY;j++){
+					out.println(""+i+"\t"+j+"\t"+lattice[i][j].getVMag());
+				}
+			}
+		}
+		
+		finally{
+			if(out!=null){
+				out.close();
+			}
+		}		
 	}
 	
 	public void writeFStar(int i, int j, String filename) throws IOException{
