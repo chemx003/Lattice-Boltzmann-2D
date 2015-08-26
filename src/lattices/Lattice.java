@@ -8,6 +8,8 @@ package lattices;
  */
 
 import java.io.*;
+
+import nodes.BBNode;
 import nodes.LatticeNode;
 
 public class Lattice {
@@ -77,20 +79,34 @@ public class Lattice {
 			}
 		}//diag down
 	}
-	
+
 	/*
 	 * This will create a vertical (left and right) periodic boundaries by linking the nodes on 
 	 * both sides together
 	 */
 	public void verticalPBounds(){
-		//left side
 		for(int j=1; j<lenY-1;j++){
+			lattice[0][j].setType('P');
 			lattice[0][j].setNode(6, lattice[lenX-1][j-1]);
 			lattice[0][j].setNode(2, lattice[lenX-1][j]);
 			lattice[0][j].setNode(5, lattice[lenX-1][j+1]);
+			lattice[lenX-1][j].setType('P');
 			lattice[lenX-1][j].setNode(7, lattice[0][j-1]);
 			lattice[lenX-1][j].setNode(0, lattice[0][j]);
 			lattice[lenX-1][j].setNode(4, lattice[0][j+1]);
+		}
+	}
+	
+	public void horizontalPBounds(){
+		for(int i=1; i<lenX-1;i++){
+			lattice[i][0].setType('P');
+			lattice[i][0].setNode(6, lattice[i-1][lenY-1]);
+			lattice[i][0].setNode(3, lattice[i][lenY-1]);
+			lattice[i][0].setNode(7, lattice[i+1][lenY-1]);
+			lattice[i][lenY-1].setType('P');
+			lattice[i][lenY-1].setNode(5, lattice[i-1][0]);
+			lattice[i][lenY-1].setNode(1, lattice[i][0]);
+			lattice[i][lenY-1].setNode(4, lattice[i+1][0]);
 		}
 	}
 	
@@ -106,7 +122,7 @@ public class Lattice {
 	public void initialize(){
 		for(int i=0;i<lenX;i++){
 			for(int j=0;j<lenY;j++){
-				lattice[i][j].calcDist();
+					lattice[i][j].calcDist();
 			}
 		}
 	}
@@ -116,7 +132,9 @@ public class Lattice {
 			for(int j=0;j<lenY;j++){
 				lattice[i][j].getDist();
 				lattice[i][j].calcRho();
-				lattice[i][j].calcU();
+				if(lattice[i][j].getType()!='B'){
+					lattice[i][j].calcU();
+				}
 			}
 		}
 	}
@@ -124,10 +142,16 @@ public class Lattice {
 	public void collide(){
 		for(int i=0;i<lenX;i++){
 			for(int j=0;j<lenY;j++){
-				lattice[i][j].calcDist();
+				if(lattice[i][j].getType()!='B'){
+					lattice[i][j].calcDist();
+				}
 			}
 		}
 	}
+	
+	public int getLenX(){return lenX;}
+	public int getLenY(){return lenY;}
+	public LatticeNode getNode(int i, int j){return lattice[i][j];}
 	
 	public void writeDensities(String filename) throws IOException{
 		PrintWriter out=null;
@@ -204,15 +228,7 @@ public class Lattice {
 		for(int j=lenY-1;j>=0;j--){	
 			for(int i=0;i<lenX;i++){
 				if(lattice[i][j]!=null){
-					if(lattice[i][j].getType()=='L'){
-						System.out.print("L ");
-					}
-					else if(lattice[i][j].getType()=='B'){
-						System.out.print("B ");
-					}
-					else{
-						System.out.print("U ");
-					}
+					System.out.print(lattice[i][j].getType());
 				}
 				else{
 					System.out.print("F ");

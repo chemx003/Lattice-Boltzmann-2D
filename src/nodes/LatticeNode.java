@@ -59,7 +59,7 @@ public class LatticeNode {
 			double[] b=b(i);
 			double eqDist=wi*rho+rho*wi*( (3*(b[0]*u[0]+b[1]*u[1])/c) 
 					+ (4.5*Math.pow(b[0]*u[0]+b[1]*u[1], 2)/Math.pow(c, 2)) 
-					- (1.5*(u[0]*u[0]+u[1]*u[1])/Math.pow(c, 2)));
+					- (1.5*(u[0]*u[0]+u[1]*u[1])/Math.pow(c, 2)) );
 			fEQ[i]=eqDist;
 		}
 		return fEQ;
@@ -97,7 +97,7 @@ public class LatticeNode {
 	 * @return				f value at a specified index
 	 */
 	public double giveDist(int index){
-		if(index<10 && index>=0)
+		if(index<9 && index>=0)
 			return f[index];
 		else 
 			return 0;
@@ -109,7 +109,7 @@ public class LatticeNode {
 	 * @return				f* value at specified index
 	 */
 	public double giveFStar(int index){
-		if(index<10 && index>=0)
+		if(index<9 && index>=0)
 			return fStar[index];
 		else 
 			return 0;
@@ -167,6 +167,28 @@ public class LatticeNode {
 		}
 	}
 	
+	public double getVxMag(){
+		double vxMag=0.0;
+		if(u!=null){
+			vxMag=u[0];
+			return vxMag;
+		}
+		else{
+			return vxMag;
+		}
+	}
+	
+	public double getVyMag(){
+		double vyMag=0.0;
+		if(u!=null){
+			vyMag=u[1];
+			return vyMag;
+		}
+		else{
+			return vyMag;
+		}
+	}
+	
 	/*
 	 * @return				relaxation constant at the node
 	 */
@@ -185,14 +207,18 @@ public class LatticeNode {
 	 * @return				LatticeNode object at specified index in nodes
 	 */
 	public LatticeNode getNode(int index){
-		if(index<9 && index>=0)
+		if(index<8 && index>=0)
 			return nodes[index];
 		else
 			return null;
 	}
 	
 	public char getType(){
-		return 'L';
+		return type;
+	}
+	
+	public void setType(char c){
+		type=c;
 	}
 	
 	/*
@@ -203,6 +229,10 @@ public class LatticeNode {
 	 */
 	public void setNode(int index, LatticeNode n){
 		nodes[index]=n;
+	}
+	
+	public void setRho(double density){
+		rho=density;
 	}
 	
 	/*
@@ -280,11 +310,14 @@ public class LatticeNode {
 		return basis;
 	}
 	
+	public void bounceback(){};
+	
 	protected double[] f=new double[9];						//Array holding distribution fcns for each basis
 	protected double[] fStar=null;							//Array holding dist. fcns streamed from other nodes
 	protected LatticeNode[] nodes=new LatticeNode[8];		//Array holding pointers to other nodes
 	protected double[] u={0.0,0.0};							//Current velocity at the node
-	protected double rho=0;									//Current density at the node
-	protected double c=1;									//Lattice speed at the node
+	protected double rho=1.0;									//Current density at the node
+	protected double c=1.0;									//Lattice speed at the node
 	protected double tau=1;									//Relaxation constant at the node
+	protected char type='L';
 }
