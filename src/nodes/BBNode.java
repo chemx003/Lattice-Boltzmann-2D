@@ -1,3 +1,5 @@
+package nodes;
+
 /*
  * To start i'll implement "on-grid" bounce back. The difference between the BBNode and the LatticeNode is 
  * the way fStar values are collected. Otherwise everything else seems the same. 
@@ -8,9 +10,10 @@ public class BBNode extends LatticeNode {
 	public BBNode(double[] velocity, double density){
 		u=velocity;
 		rho=density;
+		this.type='B';
 	}
 	
-	public BBNode(){};
+	public BBNode(){this.type='B';};
 	
 	public void getDist(){
 		for(int i=0;i<9;i++){
@@ -85,6 +88,6 @@ public class BBNode extends LatticeNode {
 	}
 	
 	public char getType(){
-		return 'B';
+		return type;
 	}
 }
